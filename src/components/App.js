@@ -1,26 +1,26 @@
+// App.js
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Routes,
   Redirect,
   Link,
+  Routes,
 } from "react-router-dom";
 import PrivateRoute from "./privateRoute";
 import LoginPage from "./login";
 import HomePage from "./home";
+import PrivatePage from "./privatePage";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    // Implement your authentication logic here
-    setIsAuthenticated(true);
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    // Implement your logout logic here
-    setIsAuthenticated(false);
+    setIsLoggedIn(false);
   };
 
   return (
@@ -29,32 +29,38 @@ const App = () => {
         <nav>
           <ul>
             <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
               <Link to="/login">Login</Link>
             </li>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/private">Private Page</Link>
             </li>
           </ul>
         </nav>
         <Routes>
           <Route
+            path="/"
+            exact
+            element={<HomePage isLoggedIn={isLoggedIn} />}
+          />
+          <Route
             path="/login"
             element={
-              <LoginPage
-                onLogin={handleLogin}
-                isAuthenticated={isAuthenticated}
-              />
+              <LoginPage isLoggedIn={isLoggedIn} onLogin={handleLogin} />
             }
           />
-
-          <PrivateRoute
-            path="/"
-            isAuthenticated={isAuthenticated}
-            element={<HomePage />}
+          <Route
+            path="private"
+            element={<PrivateRoute Component={<PrivatePage />} />}
           />
+          {/* <PrivateRoute
+            path="/"
+            element={<PrivatePage />}
+            isLoggedIn={isLoggedIn}
+          /> */}
         </Routes>
-
-        <button onClick={handleLogout}>Logout</button>
       </div>
     </Router>
   );
