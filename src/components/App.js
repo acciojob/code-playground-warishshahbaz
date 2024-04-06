@@ -1,94 +1,61 @@
-import React, { useEffect, useState } from "react";
-import "./../styles/App.css";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
+  Routes,
   Redirect,
   Link,
-  Outlet,
-  Navigate,
 } from "react-router-dom";
-
-const LoginPage = ({ isAuthenticated, login }) => {
-  const handleLogin = () => {
-    login(true);
-    // <Navigate to="/playground" />;
-  };
-  const handleLogout = () => {
-    login(false);
-  };
-  useEffect(() => {
-    console.log("Logged out", isAuthenticated);
-    if (isAuthenticated) {
-      <Navigate to="/playground" />;
-    }
-  }, [isAuthenticated]);
-
-  return (
-    <div className="main-container">
-      <Header />
-      <p>You are not Authenticated ,Please Login First</p>
-      <h2>Login Page</h2>
-      {isAuthenticated ? (
-        <button onClick={handleLogout}>logout</button>
-      ) : (
-        <button onClick={handleLogin}>Login</button>
-      )}
-    </div>
-  );
-};
-
-const PrivateRoute = ({ isAuthenticatedt }) => {
-  return isAuthenticatedt ? <Outlet /> : <Navigate to="/" />;
-};
-
-const HomePage = () => {
-  return (
-    <div className="main-container">
-      <Header />
-      <h2>Home Page</h2>
-      <p>Welcome! You are authenticated.</p>
-    </div>
-  );
-};
-const Header = () => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="playground">PlayGround</Link>
-        </li>
-        <li>
-          <Link to="/">Login</Link>
-        </li>
-      </ul>
-    </nav>
-  );
-};
+import PrivateRoute from "./privateRoute";
+import LoginPage from "./login";
+import HomePage from "./home";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLogin = (isLoggedIn) => {
-    setIsAuthenticated(isLoggedIn);
+  const handleLogin = () => {
+    // Implement your authentication logic here
+    setIsAuthenticated(true);
   };
-  console.log(isAuthenticated, "isAuthenticated");
+
+  const handleLogout = () => {
+    // Implement your logout logic here
+    setIsAuthenticated(false);
+  };
+
   return (
     <Router>
-      <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <LoginPage isAuthenticated={isAuthenticated} login={handleLogin} />
-          }
-        />
+      <div className="main-container">
+        <nav>
+          <ul>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                onLogin={handleLogin}
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
 
-        <Route path="/" element={<PrivateRoute isAuthenticated={true} />}>
-          <Route path="/playground" element={<HomePage />} />
-        </Route>
-      </Routes>
+          <PrivateRoute
+            path="/"
+            isAuthenticated={isAuthenticated}
+            element={<HomePage />}
+          />
+        </Routes>
+
+        <button onClick={handleLogout}>Logout</button>
+      </div>
     </Router>
   );
 };
