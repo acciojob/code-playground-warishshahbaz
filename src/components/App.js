@@ -1,11 +1,14 @@
 import React from "react";
-import ReactDOM from "react-dom";
+
 import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Routes,
   Link,
   Redirect,
+  useNavigate,
+  Navigate,
 } from "react-router-dom";
 // react router dom version 5 was used here
 
@@ -14,23 +17,9 @@ import Home from "./Home";
 import NotFound from "./NotFound";
 
 // Custom PrivateRoute component
-const PrivateRoute = ({
-  component: Component,
-  isAuthenticated,
-  redirect,
-  ...rest
-}) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated === true ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={redirect} />
-      )
-    }
-  />
-);
+const PrivateRoute = ({ isAuthenticated, element, path }) => {
+  return isAuthenticated ? <Outlet /> : Navigate("./login");
+};
 
 class App extends React.Component {
   constructor(props) {
@@ -65,22 +54,29 @@ class App extends React.Component {
               </li>
             </ul>
           </div>
-          <Switch>
+          <Routes>
             <Route
               path="/login"
               render={(props) => (
                 <Login {...props} login={this.login} isLogged={isLoggedIn} />
               )}
             />
-            <PrivateRoute
+            <Route
+              exact
+              path="/"
+              element={<PrivateRoute isAuthenticated={isLoggedIn} />}
+            >
+              <Route exact path="/" element={<Home />} />
+            </Route>
+            {/* <PrivateRoute
               exact
               path="/home"
               component={Home}
               isAuthenticated={isLoggedIn}
               redirect="/login"
-            />
-            <Route component={NotFound} />
-          </Switch>
+            /> */}
+            <Route element={<NotFound />} />
+          </Routes>
         </div>
       </Router>
     );
