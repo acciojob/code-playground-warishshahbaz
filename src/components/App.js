@@ -65,13 +65,7 @@ class App extends React.Component {
             >
               <Route exact path="/" element={<Home />} />
             </Route>
-            {/* <PrivateRoute
-              exact
-              path="/home"
-              component={Home}
-              isAuthenticated={isLoggedIn}
-              redirect="/login"
-            /> */}
+
             <Route element={<NotFound />} />
           </Routes>
         </div>
