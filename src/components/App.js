@@ -57,9 +57,7 @@ class App extends React.Component {
           <Routes>
             <Route
               path="/login"
-              element={
-                <Login {...props} login={this.login} isLogged={isLoggedIn} />
-              }
+              element={<Login login={this.login} isLogged={isLoggedIn} />}
             />
             <Route
               exact
