@@ -3,12 +3,11 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
   Routes,
   Link,
-  Redirect,
   useNavigate,
   Navigate,
+  Outlet,
 } from "react-router-dom";
 // react router dom version 5 was used here
 
