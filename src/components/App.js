@@ -17,8 +17,8 @@ import Home from "./Home";
 import NotFound from "./NotFound";
 
 // Custom PrivateRoute component
-const PrivateRoute = ({ isAuthenticated, element, path }) => {
-  return isAuthenticated ? <Outlet /> : Navigate("./login");
+const PrivateRoute = ({ isAuthenticated }) => {
+  return isAuthenticated ? <Outlet /> : <Navigate to={"/login"} />;
 };
 
 class App extends React.Component {
@@ -47,7 +47,7 @@ class App extends React.Component {
           <div>
             <ul>
               <li>
-                <Link to="/home">PlayGround</Link>
+                <Link to="/">PlayGround</Link>
               </li>
               <li>
                 <Link to="/login">Login</Link>
@@ -57,9 +57,9 @@ class App extends React.Component {
           <Routes>
             <Route
               path="/login"
-              render={(props) => (
+              element={
                 <Login {...props} login={this.login} isLogged={isLoggedIn} />
-              )}
+              }
             />
             <Route
               exact
