@@ -5,7 +5,6 @@ import {
   Route,
   Routes,
   Link,
-  useNavigate,
   Navigate,
   Outlet,
 } from "react-router-dom";
